@@ -39,12 +39,25 @@ class AttachController extends Controller
             ->mapInto($field->resourceClass)
             ->filter(function ($resource) use ($request, $field) {
                 return $request->newResource()->authorizedToAttach($request, $resource->resource);
-            })->map(function($resource) {
+            })->map(function ($resource) use ($field) {
                 return [
                     'display' => $resource->title(),
                     'value' => $resource->getKey(),
                     'previewImg' => $resource->previewImg ?? null,
+                    'novaUrl' => $this->buildNovaResourceUrl($resource, $field),
+                    'detailAttribute' => optional($resource)->{$field->detailAttribute},
                 ];
             })->sortBy('display')->values();
+    }
+
+    public function buildNovaResourceUrl(Resource $resource, $field)
+    {
+        return url(
+            vsprintf('%s/resources/%s/%d', [
+                config('nova.path'),
+                $field->resourceClass::uriKey(),
+                $resource->getKey(),
+            ])
+        );
     }
 }

@@ -22,14 +22,23 @@
                         <div class="w-16 flex justify-center">
                             <fake-checkbox :checked="selected.includes(resource.value)" />
                         </div>
-                        <span class="flex items-center">
-                            <img
-                                v-if="resource.previewImg"
-                                :src="resource.previewImg"
-                                class="w-8 h-8 rounded-full shadow object-cover mr-4"
-                            >
-                            <span>
-                                {{ resource.display }}
+                        <span class="flex items-center justify-between w-full">
+                            <span class="flex items-center">
+                                <img
+                                    v-if="resource.previewImg"
+                                    :src="resource.previewImg"
+                                    class="w-8 h-8 rounded-full shadow object-cover mr-4"
+                                >
+                                <span>
+                                    {{ resource.display }}
+                                    <span v-if="resource.detailAttribute" class="text-60">
+                                        ({{ resource.detailAttribute }})
+                                    </span>
+                                </span>
+                                </span>
+                            </span>
+                            <span class="text-right pr-4 text-60">
+                                #{{ resource.value }}
                             </span>
                         </span>
                     </div>
@@ -45,7 +54,7 @@
                     <span v-if="field.showCounts" class="pr-2 border-60 whitespace-no-wrap" :class="{ 'border-r mr-2': field.helpText }">
                         {{ selected.length  }} / {{ available.length }}
                     </span>
-                    <span class="border-60" :class="{'border-r mr-2': field.showPreview }">
+                    <span class="border-60">
                         <help-text class="help-text" v-if="field.helpText"> {{ field.helpText }} </help-text>
                     </span>
                 </span>
