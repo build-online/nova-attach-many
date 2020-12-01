@@ -18,11 +18,20 @@
                     <div v-if="loading" class="flex justify-center items-center absolute pin z-50 bg-white">
                         <loader class="text-60" />
                     </div>
-                    <div v-else v-for="resource in resources" :key="resource.value" @click="toggle($event, resource.value)" class="flex py-3 cursor-pointer select-none hover:bg-30">
+                    <div v-else v-for="resource in resources" :key="resource.value" @click="toggle($event, resource.value)" class="flex items-center py-3 cursor-pointer select-none hover:bg-30">
                         <div class="w-16 flex justify-center">
                             <fake-checkbox :checked="selected.includes(resource.value)" />
                         </div>
-                        <span>{{ resource.display }}</span>
+                        <span class="flex items-center">
+                            <img
+                                v-if="resource.previewImg"
+                                :src="resource.previewImg"
+                                class="w-8 h-8 rounded-full shadow object-cover mr-4"
+                            >
+                            <span>
+                                {{ resource.display }}
+                            </span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -31,16 +40,18 @@
                 {{ firstError }}
             </help-text>
 
-            <div class="help-text mt-3 w-full flex" :class="{ 'invisible': loading }">
-                <span v-if="field.showCounts" class="pr-2 float-left border-60 whitespace-no-wrap" :class="{ 'border-r mr-2': field.helpText }">
-                    {{ selected.length  }} / {{ available.length }}
-                </span>
-                <span class="float-left border-60" :class="{'border-r mr-2': field.showPreview }">
-                    <help-text class="help-text" v-if="field.helpText"> {{ field.helpText }} </help-text>
+            <div class="help-text mt-3 w-full flex justify-between" :class="{ 'invisible': loading }">
+                <span>
+                    <span v-if="field.showCounts" class="pr-2 border-60 whitespace-no-wrap" :class="{ 'border-r mr-2': field.helpText }">
+                        {{ selected.length  }} / {{ available.length }}
+                    </span>
+                    <span class="border-60" :class="{'border-r mr-2': field.showPreview }">
+                        <help-text class="help-text" v-if="field.helpText"> {{ field.helpText }} </help-text>
+                    </span>
                 </span>
 
                 <span v-if="field.showPreview" @click="togglePreview($event)" class="flex cursor-pointer select-none float-right">
-                    <span class="pr-2">{{ __('Preview') }}</span>
+                    <span class="pr-2">{{ __('Show Only Selected') }}</span>
                     <fake-checkbox class="flex" :checked="preview" />
                 </span>
             </div>

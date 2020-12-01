@@ -43,6 +43,7 @@ class AttachController extends Controller
                 return [
                     'display' => $resource->title(),
                     'value' => $resource->getKey(),
+                    'previewImg' => $resource->previewImg ?? null,
                 ];
             })->sortBy('display')->values();
     }
