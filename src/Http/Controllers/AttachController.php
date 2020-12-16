@@ -2,6 +2,7 @@
 
 namespace NovaAttachMany\Http\Controllers;
 
+use Illuminate\Support\Facades\Cache;
 use Laravel\Nova\Resource;
 use Illuminate\Routing\Controller;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -35,23 +36,27 @@ class AttachController extends Controller
 
         $query = $field->resourceClass::newModel();
 
-        return $field->resourceClass::relatableQuery($request, $query)
-            ->cursor()
-            ->mapInto($field->resourceClass)
-            ->filter(function ($resource) use ($request, $field) {
-                return $request->newResource()->authorizedToAttach($request, $resource->resource);
-            })
-            ->map(function ($resource) use ($field) {
-                return [
-                    'display' => $resource->title(),
-                    'value' => $resource->getKey(),
-                    'previewImg' => $resource->previewImg ?? null,
-                    'novaUrl' => $this->buildNovaResourceUrl($resource, $field),
-                    'detailAttribute' => optional($resource)->{$field->detailAttribute},
-                ];
-            })
-            ->sortBy('display')
-            ->values();
+        return Cache::remember($field->cacheKey, $field->cacheTtl, function () use ($request, $field) {
+            $query = $field->resourceClass::newModel();
+
+            return $field->resourceClass::relatableQuery($request, $query)
+                ->get()
+                ->mapInto($field->resourceClass)
+                ->filter(function ($resource) use ($request, $field) {
+                    return $request->newResource()->authorizedToAttach($request, $resource->resource);
+                })
+                ->map(function ($resource) use ($field) {
+                    return [
+                        'display' => $resource->title(),
+                        'value' => $resource->getKey(),
+                        'previewImg' => $resource->previewImg ?? null,
+                        'novaUrl' => $this->buildNovaResourceUrl($resource, $field),
+                        'detailAttribute' => optional($resource)->{$field->detailAttribute},
+                    ];
+                })
+                ->sortBy('display')
+                ->values();
+        });
     }
 
     public function buildNovaResourceUrl(Resource $resource, $field)

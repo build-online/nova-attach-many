@@ -2,6 +2,7 @@
 
 namespace NovaAttachMany;
 
+use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Authorizable;
@@ -29,6 +30,10 @@ class AttachMany extends Field
 
     public $detailAttribute = null;
 
+    public $cacheKey = null;
+
+    public $cacheTtl = 0;
+
     public $component = 'nova-attach-many';
 
     public function __construct($name, $attribute = null, $resource = null)
@@ -54,6 +59,15 @@ class AttachMany extends Field
                 unset($request->$attribute);
             }
         });
+
+        $this->cacheKey = sprintf('nova-attach-many:%s', $this->resourceName);
+    }
+
+    public function cacheFor(CarbonInterval $interval = null)
+    {
+        $this->cacheTtl = $interval ?? 0;
+
+        return $this;
     }
 
     public function rules($rules)
