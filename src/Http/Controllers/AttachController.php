@@ -35,11 +35,13 @@ class AttachController extends Controller
 
         $query = $field->resourceClass::newModel();
 
-        return $field->resourceClass::relatableQuery($request, $query)->get()
+        return $field->resourceClass::relatableQuery($request, $query)
+            ->cursor()
             ->mapInto($field->resourceClass)
             ->filter(function ($resource) use ($request, $field) {
                 return $request->newResource()->authorizedToAttach($request, $resource->resource);
-            })->map(function ($resource) use ($field) {
+            })
+            ->map(function ($resource) use ($field) {
                 return [
                     'display' => $resource->title(),
                     'value' => $resource->getKey(),
@@ -47,7 +49,9 @@ class AttachController extends Controller
                     'novaUrl' => $this->buildNovaResourceUrl($resource, $field),
                     'detailAttribute' => optional($resource)->{$field->detailAttribute},
                 ];
-            })->sortBy('display')->values();
+            })
+            ->sortBy('display')
+            ->values();
     }
 
     public function buildNovaResourceUrl(Resource $resource, $field)
