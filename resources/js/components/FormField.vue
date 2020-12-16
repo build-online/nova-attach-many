@@ -24,11 +24,12 @@
                         </div>
                         <span class="flex items-center justify-between w-full">
                             <span class="flex items-center">
-                                <img
+                                <ImageLazy
                                     v-if="resource.previewImg"
                                     :src="resource.previewImg"
                                     class="w-8 h-8 rounded-full shadow object-cover mr-4"
-                                >
+                                    :delay="200"
+                                />
                                 <span>
                                     {{ resource.display }}
                                     <span v-if="resource.detailAttribute" class="text-60">
@@ -70,12 +71,17 @@
 </template>
 
 <script>
+import ImageLazy from 'cube-vue-image-lazy'
 import { FormField, HandlesValidationErrors } from 'laravel-nova'
 
 export default {
     mixins: [FormField, HandlesValidationErrors],
 
     props: ['resourceName', 'resourceId', 'field'],
+
+    components: {
+      ImageLazy
+    },
 
     data() {
         return {

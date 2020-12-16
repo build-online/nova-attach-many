@@ -2177,6 +2177,11 @@ csso@~2.3.1:
     clap "^1.0.9"
     source-map "^0.5.3"
 
+cube-vue-image-lazy@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/cube-vue-image-lazy/-/cube-vue-image-lazy-0.4.0.tgz#4eaa9f1208be84cd9057ab06947b82cdba19a176"
+  integrity sha512-4AoWSgLa76NacMwtK7eaD5SdGLKcJatvNpyxawwUrpYlwbSyxGwUc7Xeyis4YKgAKf0FtwHmgFy/0oB5AHwCpQ==
+
 currently-unhandled@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
