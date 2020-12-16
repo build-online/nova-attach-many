@@ -20,6 +20,7 @@
                     </div>
                     <div v-else>
                         <RecycleScroller
+                            :style="{ height: field.height }"
                             :items="resources"
                             :min-item-size="56"
                             key-field="value"
